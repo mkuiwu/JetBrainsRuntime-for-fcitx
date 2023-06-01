@@ -109,24 +109,13 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.vars.outputs.tag_name }}
-        release_name:  ${{ steps.vars.outputs.release_name }}
+        name:  ${{ steps.vars.outputs.release_name }}
         body: ${{ steps.vars.outputs.release_body }}
         draft: false
         prerelease: true
-
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: JetBrainsRuntime/${{ steps.compile.outputs.jbr_image }}
-        asset_name: ${{ steps.compile.outputs.jbr_image }}
-        asset_content_type: application/gzip
-
+        files: JetBrainsRuntime/${{ steps.compile.outputs.jbr_image }}
