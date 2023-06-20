@@ -71,6 +71,8 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo apt-get update -y
+        sudo rm -f /var/lib/man-db/auto-update
+        echo update_initramfs=no | sudo tee /etc/initramfs-tools/update-initramfs.conf
         sudo apt-get install -y libasound2-dev libavcodec-dev libavformat-dev libcups2-dev libgl1-mesa-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgtk2.0-dev libgtk-3-dev libudev-dev libxrandr-dev libxslt1-dev libxtst-dev libxxf86vm-dev x11proto-xf86vidmode-dev
         sudo apt-get clean -y
 
@@ -80,7 +82,7 @@ jobs:
         mkdir jcef_linux_x64
         cd jcef_linux_x64
         tar -zxvf ../jbrsdk_jcef.tgz --strip-components=1 -C ./ --wildcards -- 'jbrsdk_jcef-*/jmods/gluegen.rt.jmod' 'jbrsdk_jcef-*/jmods/jogl.all.jmod' 'jbrsdk_jcef-*/jmods/jcef.jmod' 'jbrsdk_jcef-*/release'
-        grep '^JCEF_VERSION' release > jcef.version
+        grep '^JCEF_VERSION' release > jcef.version || cat release
         rm -f ../jbrsdk_jcef.tgz
 
     - name: Clone JBR Repository
